@@ -12,7 +12,7 @@ export const Route = createFileRoute("/api/health")({
         } catch (e) {
           console.error("Database connection error:", e);
           return Response.json(
-            { status: "ok", database: "not connected" },
+            { status: "error", database: "not connected" },
             { status: 500 },
           );
         }
