@@ -7,9 +7,9 @@ export const Route = createFileRoute("/login")({ component: AuthPage });
 export default function AuthPage() {
   return (
     <AuthUI
-      onGoogleSignIn={() =>
-        authClient.signIn.social({ provider: "google", callbackURL: "/" })
-      }
+      onGoogleSignIn={async () => {
+        authClient.signIn.social({ provider: "google", callbackURL: "/" });
+      }}
     />
   );
 }
