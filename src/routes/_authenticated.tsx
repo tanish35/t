@@ -2,26 +2,43 @@ import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { authClient } from "@/lib/auth-client";
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
-  IconArrowLeft,
   IconBrandTabler,
   IconSettings,
   IconUserBolt,
+  IconLogout,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { auth } from "@/lib/auth";
+import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
+
+export const getUserSession = createServerFn({ method: "GET" }).handler(
+  async () => {
+    const data = auth.api.getSession({ headers: getRequestHeaders() });
+    return data;
+  },
+);
 
 export const Route = createFileRoute("/_authenticated")({
-  beforeLoad: async () => {
-    const session = await authClient.getSession();
-    if (!session) {
-      redirect({ to: "/login", search: { redirect: window.location.href } });
+  beforeLoad: async ({ location }) => {
+    const data = await getUserSession();
+    if (!data) {
+      throw redirect({
+        to: "/login",
+        search: { redirect: location.href },
+        replace: true,
+      });
     }
+    return { session: data.session, user: data.user };
   },
   component: AuthenticatedRouteComponent,
 });
 
 function AuthenticatedRouteComponent() {
+  const navigate = useNavigate();
   const links = [
     {
       label: "Dashboard",
@@ -42,13 +59,6 @@ function AuthenticatedRouteComponent() {
       href: "#",
       icon: (
         <IconSettings className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
-    {
-      label: "Logout",
-      href: "#",
-      icon: (
-        <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
   ];
@@ -85,6 +95,26 @@ function AuthenticatedRouteComponent() {
                     height={50}
                     alt="Avatar"
                   />
+                ),
+              }}
+            />
+            <SidebarLink
+              onClick={async (e) => {
+                e.preventDefault();
+                const { error } = await authClient.signOut();
+                if (error) {
+                  console.error("Error signing out:", error.message);
+                }
+                await navigate({
+                  to: "/login",
+                  replace: true,
+                });
+              }}
+              link={{
+                label: "Logout",
+                href: "#",
+                icon: (
+                  <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
                 ),
               }}
             />

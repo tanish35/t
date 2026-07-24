@@ -6,10 +6,8 @@ import { ArrowRight, Clapperboard, Pause, Play } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface HeroLandingProps {
-  /** Background clip. Autoplays muted on a loop. */
   src?: string;
   poster?: string;
-  /** Slowed down by default so the loop reads as ambient, not busy. */
   playbackRate?: number;
   className?: string;
 }
@@ -39,8 +37,6 @@ export function HeroLanding({
   const [isPlaying, setIsPlaying] = useState(true);
   const [projectName, setProjectName] = useState("");
 
-  // Drive the scrubber from the clip itself. `timeupdate` only fires ~4x/sec,
-  // which visibly steps, so read currentTime on every frame instead.
   useEffect(() => {
     let animationId = 0;
 
@@ -66,11 +62,6 @@ export function HeroLanding({
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // `fromTo`, not `from`: `from` reads the end state off the live DOM, so if
-    // the route unmounts mid-animation it records a half-faded opacity as the
-    // target. And `context().revert()`, not `kill()`: kill stops the tween but
-    // leaves GSAP's inline styles behind, which strands the text at opacity 0
-    // when you navigate back to the homepage.
     const context = gsap.context(() => {
       const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
       const visible = { y: 0, opacity: 1 };
@@ -240,7 +231,10 @@ export function HeroLanding({
             />
             My project
           </span>
-          <span aria-hidden="true" className="h-6 w-px bg-[rgba(16,18,16,0.12)]" />
+          <span
+            aria-hidden="true"
+            className="h-6 w-px bg-[rgba(16,18,16,0.12)]"
+          />
           <label htmlFor="project-name" className="sr-only">
             Project name
           </label>
@@ -268,7 +262,9 @@ export function HeroLanding({
         <button
           type="button"
           onClick={togglePlayback}
-          aria-label={isPlaying ? "Pause background video" : "Play background video"}
+          aria-label={
+            isPlaying ? "Pause background video" : "Play background video"
+          }
           className="grid size-14 shrink-0 place-items-center rounded-full bg-white text-[#101210] shadow-[0_18px_36px_-16px_rgba(16,18,16,0.5)] transition-transform hover:scale-105 sm:size-16"
         >
           {isPlaying ? (
