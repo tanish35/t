@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { StepForm } from "@/components/step-form";
 import type { Step, StepValues } from "@/components/step-form";
+import { createProject } from "@/server/projects";
+// import { redirect } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/projects/new")({
   component: NewProjectRoute,
@@ -24,8 +27,14 @@ const steps: Step[] = [
 ];
 
 function NewProjectRoute() {
-  function handleSubmit(values: StepValues) {
-    console.log("new project", values);
+  const navigate = useNavigate();
+  async function handleSubmit(values: StepValues) {
+    try {
+      await createProject({ data: values });
+      navigate({ to: "/dashboard" });
+    } catch (e) {
+      console.error("Error creating project:", e);
+    }
   }
 
   return (

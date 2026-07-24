@@ -24,10 +24,18 @@ export function ProjectsBreakdownCard({
     <section className="rounded-[26px] border border-[var(--line)] bg-[var(--card)] p-6 shadow-[0_14px_32px_rgba(16,18,16,0.06)]">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-[1fr_150px]">
         <div>
-          <h2 className="mb-5 text-lg leading-tight font-bold tracking-[-0.01em] text-[var(--sea-ink)]">
-            Projects &amp;<br />
-            recordings
-          </h2>
+          <div className="mb-5 flex items-start justify-between gap-3">
+            <h2 className="text-lg leading-tight font-bold tracking-[-0.01em] text-[var(--sea-ink)]">
+              Projects &amp;<br />
+              recordings
+            </h2>
+            <Link
+              to="/projects"
+              className="text-sm font-semibold text-[var(--sea-ink)] underline underline-offset-4"
+            >
+              See all
+            </Link>
+          </div>
 
           <ol className="relative flex flex-col gap-4 pl-5">
             <span

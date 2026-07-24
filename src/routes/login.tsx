@@ -7,7 +7,7 @@ export const Route = createFileRoute("/login")({
   beforeLoad: async () => {
     const { data: session } = await authClient.getSession();
     if (session) {
-      throw redirect({ to: "/projects" });
+      throw redirect({ to: "/dashboard" });
     }
   },
   component: AuthPage,
@@ -19,7 +19,7 @@ export default function AuthPage() {
       onGoogleSignIn={async () => {
         await authClient.signIn.social({
           provider: "google",
-          callbackURL: "/projects",
+          callbackURL: "/dashboard",
         });
       }}
     />
