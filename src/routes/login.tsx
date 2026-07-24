@@ -17,7 +17,7 @@ export default function AuthPage() {
   return (
     <AuthUI
       onGoogleSignIn={async () => {
-        authClient.signIn.social({
+        await authClient.signIn.social({
           provider: "google",
           callbackURL: "/projects",
         });

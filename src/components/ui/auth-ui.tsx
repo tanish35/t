@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IconLoader2 } from "@tabler/icons-react";
 
 interface AuthUIProps {
   illustrationSrc?: string;
@@ -41,7 +42,7 @@ export function AuthUI({
               disabled={loading}
               className="flex h-14 w-full items-center justify-center gap-4 rounded-2xl border border-white/10 bg-black text-base font-semibold transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              <GoogleIcon />
+              {loading ? <IconLoader2 className="size-5 animate-spin" aria-hidden="true" /> : <GoogleIcon />}
               {loading ? "Redirecting..." : "Continue with Google"}
             </button>
           </div>

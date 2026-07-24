@@ -6,6 +6,7 @@ import {
   IconSettings,
   IconUserBolt,
   IconLogout,
+  IconLoader2,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 
 export const getUserSession = createServerFn({ method: "GET" }).handler(
   async () => {
-    const data = auth.api.getSession({ headers: getRequestHeaders() });
+    const data = await auth.api.getSession({ headers: getRequestHeaders() });
     return data;
   },
 );
@@ -63,6 +64,8 @@ function AuthenticatedRouteComponent() {
     },
   ];
   const [open, setOpen] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const { user } = Route.useRouteContext();
   return (
     <div
       className={cn(
@@ -82,14 +85,14 @@ function AuthenticatedRouteComponent() {
               ))}
             </div>
           </div>
-          <div>
+          <div className="space-y-1">
             <SidebarLink
               link={{
-                label: "Manu Arora",
+                label: user?.name || "User",
                 href: "#",
                 icon: (
                   <img
-                    src="https://assets.aceternity.com/manu.png"
+                    src={user?.image || "/default-avatar.png"}
                     className="h-7 w-7 shrink-0 rounded-full"
                     width={50}
                     height={50}
@@ -99,22 +102,32 @@ function AuthenticatedRouteComponent() {
               }}
             />
             <SidebarLink
+              className="rounded-lg text-red-600 transition-colors hover:bg-red-500/10 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 [&>span]:text-red-600 dark:[&>span]:text-red-400"
               onClick={async (e) => {
                 e.preventDefault();
-                const { error } = await authClient.signOut();
-                if (error) {
-                  console.error("Error signing out:", error.message);
+                if (isSigningOut) return;
+                setIsSigningOut(true);
+                try {
+                  const { error } = await authClient.signOut();
+                  if (error) {
+                    console.error("Error signing out:", error.message);
+                    return;
+                  }
+                  await navigate({
+                    to: "/login",
+                    replace: true,
+                  });
+                } finally {
+                  setIsSigningOut(false);
                 }
-                await navigate({
-                  to: "/login",
-                  replace: true,
-                });
               }}
               link={{
-                label: "Logout",
+                label: isSigningOut ? "Logging out..." : "Logout",
                 href: "#",
-                icon: (
-                  <IconLogout className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+                icon: isSigningOut ? (
+                  <IconLoader2 className="h-7 w-7 shrink-0 animate-spin p-1" />
+                ) : (
+                  <IconLogout className="h-7 w-7 shrink-0 p-1" />
                 ),
               }}
             />
@@ -138,7 +151,7 @@ export const Logo = () => {
         animate={{ opacity: 1 }}
         className="font-medium whitespace-pre text-black dark:text-white"
       >
-        Acet Labs
+        ReplayForge
       </motion.span>
     </a>
   );
