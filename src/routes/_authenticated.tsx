@@ -4,9 +4,9 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
   IconBrandTabler,
   IconSettings,
-  IconUserBolt,
   IconLogout,
   IconLoader2,
+  IconFolders,
 } from "@tabler/icons-react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
@@ -49,10 +49,10 @@ function AuthenticatedRouteComponent() {
       ),
     },
     {
-      label: "Profile",
-      href: "#",
+      label: "Projects",
+      href: "/projects",
       icon: (
-        <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        <IconFolders className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     {

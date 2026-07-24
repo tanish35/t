@@ -33,6 +33,7 @@ export const replayEventType = pgEnum("replay_event_type", [
   "network",
   "error",
   "metadata",
+  "rrweb",
 ]);
 
 export const projects = pgTable("projects", {
@@ -115,6 +116,7 @@ export const ingestTokens = pgTable(
       .references(() => projects.id, { onDelete: "cascade" }),
     name: text().notNull(),
     tokenHash: text("token_hash").notNull().unique(),
+    tokenSuffix: text("token_suffix").notNull(),
     lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
     expiresAt: timestamp("expires_at", { withTimezone: true }),
     revokedAt: timestamp("revoked_at", { withTimezone: true }),

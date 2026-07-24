@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ProjectDetails } from "@/components/projects/ProjectDetails";
 
 export const Route = createFileRoute(
   "/_authenticated/projects/$projectId/edit",
@@ -6,6 +7,4 @@ export const Route = createFileRoute(
   component: RouteComponent,
 });
 
-function RouteComponent() {
-  return <div>Hello "/_authenticated/projects/$projectId/edit"!</div>;
-}
+function RouteComponent() { return <ProjectDetails projectId={Route.useParams().projectId} />; }
