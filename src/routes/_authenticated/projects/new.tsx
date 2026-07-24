@@ -6,21 +6,20 @@ export const Route = createFileRoute("/_authenticated/projects/new")({
   component: NewProjectRoute,
 });
 
-// Add a step here and the form picks it up — question, control and animation included.
 const steps: Step[] = [
   {
     name: "name",
     type: "text",
     question: "What should we call this project?",
     hint: "You can rename it later.",
-    placeholder: "Acme onboarding",
+    placeholder: "She Medusa with a little Pocahontas",
   },
   {
     name: "description",
     type: "textarea",
     question: "What's it about?",
     hint: "A line or two is plenty. Shift + Enter for a new line.",
-    placeholder: "Session replays for the new onboarding flow",
+    placeholder: "She been lacin' all my drugs or somethin'",
   },
 ];
 

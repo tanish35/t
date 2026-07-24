@@ -34,6 +34,7 @@
     "drizzle-cuid2": "^2.2.0",
     "drizzle-kit": "^0.31.10",
     "drizzle-orm": "^0.45.2",
+    "gsap": "^3.15.0",
     "lucide-react": "^1.26.0",
     "motion": "^12.42.2",
     "nitro": "3.0.260610-beta",
