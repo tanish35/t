@@ -118,7 +118,9 @@ export const ingestTokens = pgTable(
     tokenHash: text("token_hash").notNull().unique(),
     tokenSuffix: text("token_suffix").notNull(),
     lastUsedAt: timestamp("last_used_at", { withTimezone: true }),
-    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).$default(
+      () => new Date(Date.now() + 24 * 60 * 60 * 1000),
+    ),
     revokedAt: timestamp("revoked_at", { withTimezone: true }),
     createdAt: timestamp("created_at", {
       withTimezone: true,
